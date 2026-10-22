@@ -1,0 +1,2694 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d3b52">
+<meta name="description" content="郑州升达经贸管理学院校园赛事汇总：按学院与赛事级别浏览全部校级以上学科竞赛，直达官方通知。">
+<title>升达赛事汇 · 校园比赛一站查</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d3b52'/%3E%3Cpath d='M22 16h20v14c0 8-5 13-10 13s-10-5-10-13z' fill='none' stroke='%23fff' stroke-width='3.5'/%3E%3Cpath d='M22 19h-5a5 5 0 005 7M42 19h5a5 5 0 01-5 7M27 46h10M32 46v7M25 53h14' stroke='%23d9a441' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   升达赛事汇 v4
+   纯静态 · 无外部依赖 · 无倒计时（赛程以官方通知为准）
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  /* ── 素雅竹青配色 ── */
+  --bg:#f5f6f2;          /* 米白纸底 */
+  --card:#ffffff;
+  --ink:#2b3a33;         /* 墨绿黑 */
+  --ink2:#4a5b52;
+  --muted:#7d8c84;
+  --line:#e0e4dc;
+  --line2:#edf0e9;
+  --brand:#4a6b52;       /* 竹青 */
+  --brand-d:#3b5642;
+  --brand-l:#eaf0e7;
+  --gold:#9a7b3f;
+  --gold-bg:#faf5e8;
+  --nat:#a63d33;         /* 国家级：砖红 */
+  --prov:#4a6b52;        /* 省级：竹青 */
+  --radius:12px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);
+  font-size:16px;line-height:1.65;
+  -webkit-text-size-adjust:100%;
+  -webkit-font-smoothing:antialiased;
+  width:100%;max-width:100vw;
+}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:3px solid #2f7fd1;outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ═══ 顶栏 ═══ */
+.topbar{
+  background:var(--brand);
+  color:#fff;padding:24px 18px 20px;
+}
+.topbar .school{font-size:12px;letter-spacing:.14em;opacity:.7;font-weight:400}
+.topbar h1{
+  font-size:26px;font-weight:700;margin:8px 0 6px;letter-spacing:.04em;
+  display:flex;align-items:center;gap:9px;
+}
+.topbar h1 svg{width:24px;height:24px;flex:none;opacity:.9}
+.topbar .tag{font-size:13px;opacity:.78;line-height:1.5}
+.topbar .demo{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:11px;padding:3px 9px;border-radius:5px;
+  background:rgba(217,164,65,.18);border:1px solid rgba(217,164,65,.45);
+  font-size:11px;color:#f0cf90;font-weight:500;
+}
+.topbar .stat{display:flex;gap:16px;margin-top:14px;font-size:12px;opacity:.7}
+.topbar .stat b{font-weight:700;opacity:.95;font-variant-numeric:tabular-nums}
+
+/* ═══ 粘性工具条 ═══ */
+.toolbar{
+  position:sticky;top:0;z-index:30;background:rgba(244,246,248,.94);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:11px 16px 9px;
+  width:100%;max-width:100%;
+}
+.search{
+  display:flex;align-items:center;gap:9px;background:#fff;
+  border:1px solid var(--line);border-radius:9px;
+  padding:12px 13px;             /* 搜索框整体 ≥48px */
+  min-height:48px;
+  transition:border-color .15s;
+  width:100%;min-width:0;
+}
+.search:focus-within{border-color:#a8bdaa}
+.search svg{flex:none;color:var(--muted)}
+.search input{
+  border:0;outline:0;flex:1;min-width:0;
+  font-size:16px;                /* ≥16px 防止 iOS 聚焦时自动放大 */
+  background:none;
+  padding:2px 0;
+  line-height:1.4;
+}
+.search .clr{
+  border:0;background:#eef0ea;color:var(--muted);width:22px;height:22px;
+  border-radius:50%;cursor:pointer;font-size:15px;line-height:1;
+  display:none;align-items:center;justify-content:center;flex:none;padding:0;
+}
+.search.has .clr{display:flex}
+
+/* 级别切换 */
+.seg{
+  display:flex;gap:0;margin-top:9px;background:#eef0ea;border-radius:8px;padding:3px;
+  width:100%;min-width:0;
+}
+.seg button{
+  flex:1 1 0;min-width:0;border:0;background:none;
+  padding:10px 2px;              /* 加高至 ≥44px 触控区 */
+  min-height:44px;
+  border-radius:6px;
+  font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;
+  transition:background .15s,color .15s;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+  display:flex;align-items:center;justify-content:center;
+}
+.seg button.on{background:#fff;color:var(--brand);font-weight:700}
+
+/* 分区 chips：移动端横向滚动（节省纵向空间），宽屏换行展开 */
+.chips-wrap{position:relative}
+.chips-wrap::after{
+  content:"";position:absolute;right:0;top:0;bottom:2px;width:34px;
+  background:linear-gradient(to right,rgba(245,246,242,0),var(--bg) 70%);
+  pointer-events:none;transition:opacity .2s;
+}
+.chips-wrap.at-end::after{opacity:0}
+.chips{
+  display:flex;gap:6px;margin-top:9px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  width:100%;max-width:100%;
+  padding-bottom:2px;
+}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:none;border:1px solid var(--line);background:#fff;color:var(--ink2);
+  border-radius:6px;
+  padding:10px 13px;             /* 加高至 ≥44px 触控区 */
+  min-height:44px;
+  font-size:13px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:all .13s;
+  display:inline-flex;align-items:center;
+}
+.chip:hover{border-color:#c0cec2}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.chip .n{opacity:.55;margin-left:3px;font-size:11.5px;font-variant-numeric:tabular-nums}
+.chip.on .n{opacity:.8}
+
+/* ═══ 结果条 ═══ */
+.meta{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px 4px;font-size:12.5px;color:var(--muted);
+}
+.meta b{color:var(--ink2);font-weight:700;font-variant-numeric:tabular-nums}
+.meta .reset{
+  border:0;background:none;color:var(--brand);font-size:12.5px;
+  cursor:pointer;text-decoration:underline;padding:4px 0;font-weight:500;
+}
+
+/* 图例 */
+.legend{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:0 18px 8px;font-size:11.5px;color:var(--muted);
+}
+.legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.legend .k{width:3px;height:12px;border-radius:2px;display:inline-block;flex:none}
+.legend .k.nat{background:var(--nat)}
+.legend .k.prov{background:var(--prov)}
+.legend .k.school{background:#b9944a}
+.legend .k.ind{background:#a8b3ab}
+.legend .tip{
+  margin-left:auto;opacity:.75;text-align:right;
+  flex:1 1 100%;font-size:11px;line-height:1.5;padding-top:3px;
+}
+@media (min-width:760px){
+  .legend .tip{flex:0 1 auto;padding-top:0}
+}
+
+/* ═══ 卡片列表 ═══ */
+/* 底部留白 = 导航栏高度 + 安全区 + 余量，避免最后几条被导航遮挡 */
+.list{padding:6px 16px calc(96px + env(safe-area-inset-bottom));display:grid;gap:11px;width:100%;max-width:100%}
+
+.card{
+  position:relative;display:block;width:100%;max-width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 14px 13px 17px;cursor:pointer;font:inherit;color:inherit;
+  transition:border-color .15s,background .15s;
+  overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--nat);
+}
+.card[data-lv="省级"]::before{background:var(--prov)}
+.card[data-lv="校内"]::before{background:#b9944a}
+.card[data-lv="行业级"]::before{background:#a8b3ab}
+.card[data-lv="待核实"]::before{background:#b09ab6}
+/* 考试类：淡米底，与竞赛区分 */
+.card.exam{background:#fdfcf7;border-color:#e8e4d6}
+.card.exam::before{background:#b9944a}
+.card:hover{border-color:#c4cfc6;background:#fdfdfb}
+.card:active{background:#f7f8f4}
+
+.card .row1{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.badge{
+  font-size:10.5px;font-weight:600;letter-spacing:.01em;
+  padding:1.5px 7px;border-radius:3px;line-height:1.6;
+}
+.badge.lv-nat{background:var(--nat);color:#fff}
+.badge.lv-prov{background:#e9f0e9;color:#3f5f47;border:1px solid #d0dfd2}
+.badge.lv-school{background:#faf4e6;color:#8a6d2f;border:1px solid #e8dcc0}
+.badge.lv-industry{background:#f0f2ef;color:#66756b;border:1px solid #dee4dd}
+.badge.lv-pending{background:#f5f0f6;color:#7d5f84;border:1px dashed #ddd0e0}
+.badge.cat{background:#f4f6f3;color:#6b7a70;border:1px solid #e4e9e3}
+.badge.nolink{background:#f7f7f5;color:#a3ada6;border:1px dashed #dcdfd9}
+
+.card h3{
+  font-size:16px;font-weight:700;line-height:1.55;margin:0 0 7px;
+  letter-spacing:-.003em;word-break:break-word;overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card .org{
+  display:flex;align-items:flex-start;gap:5px;
+  font-size:13px;                /* 12 → 13，移动端更易读 */
+  color:var(--muted);line-height:1.5;
+  word-break:break-word;overflow-wrap:anywhere;
+}
+.card .org svg{width:13px;height:13px;flex:none;margin-top:3px;opacity:.55}
+.card .org span{
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
+}
+/* 用右侧箭头替代重复的按钮文案 */
+.card .go{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:#c3d0da;display:flex;
+}
+.card .go svg{width:17px;height:17px}
+.card{padding-right:34px}
+
+/* ═══ 空态 ═══ */
+.empty{text-align:center;padding:70px 24px;color:var(--muted)}
+.empty svg{width:44px;height:44px;opacity:.28;margin-bottom:14px}
+.empty .t{font-size:15px;font-weight:600;color:var(--ink2);margin-bottom:5px}
+.empty .d{font-size:13.5px;line-height:1.7}
+
+/* ═══ 详情 ═══ */
+/* 详情页整体限宽，标题栏与内容同宽，避免 PC 端出现宽度断层 */
+.detail{
+  max-width:820px;margin:0 auto;
+  padding:0 0 calc(100px + env(safe-area-inset-bottom));
+}
+.dtop{
+  background:var(--brand);color:#fff;
+  padding:16px 20px 30px;
+}
+.back{
+  display:inline-flex;align-items:center;gap:4px;border:0;background:none;
+  color:rgba(255,255,255,.88);font-size:14px;font-weight:500;
+  cursor:pointer;padding:8px 10px 8px 0;margin-left:-2px;
+  min-height:44px;
+}
+.back svg{width:19px;height:19px}
+.dtop .badges{display:flex;gap:6px;margin:8px 0 10px;flex-wrap:wrap}
+.dtop .badges .badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff}
+.dtop h2{font-size:21px;font-weight:700;line-height:1.5;margin:0;letter-spacing:.01em}
+
+.dbody{padding:0 20px;margin-top:-16px;position:relative}
+.panel{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;margin-bottom:12px;
+}
+.panel h3{
+  font-size:12px;font-weight:700;color:var(--muted);
+  letter-spacing:.08em;margin:0 0 12px;
+}
+.kv{display:grid;gap:12px}
+.kv .r{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:start}
+.kv .k{font-size:13px;color:var(--muted);font-weight:500;padding-top:1px}
+.kv .v{font-size:14.5px;color:var(--ink);line-height:1.65;word-break:break-word}
+
+/* 简介段落 */
+.intro{font-size:14.5px;color:var(--ink2);line-height:1.85;margin:0;word-break:break-word}
+.intro b{color:var(--ink);font-weight:700}
+
+/* 晋级路径 */
+.stage-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:9px}
+.stage-arw{color:#b6c4cf;font-size:13px;font-weight:700}
+.stage-note{font-size:12.5px;color:var(--muted);line-height:1.7;margin:0}
+
+/* 价值说明 */
+.value-list{margin:0;padding-left:18px}
+.value-list li{font-size:14px;color:var(--ink2);line-height:1.8;margin-bottom:5px}
+.value-list li b{color:var(--ink);font-weight:700}
+.value-list .muted-line{color:var(--muted);font-size:13px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line2)}
+
+/* 级别依据 */
+.basis-text{font-size:14px;color:var(--ink2);line-height:1.8;margin:0 0 10px}
+.basis-note{font-size:12px;color:var(--muted);line-height:1.75;margin:0;padding-top:9px;border-top:1px dashed var(--line2)}
+
+/* 须知块 */
+.notice{
+  background:var(--gold-bg);border:1px solid #ece2ca;border-radius:var(--radius);
+  padding:15px 16px;margin-bottom:12px;
+  display:flex;gap:11px;align-items:flex-start;
+}
+.notice svg{width:18px;height:18px;flex:none;color:var(--gold);margin-top:1px}
+.notice .tx{font-size:13.5px;color:#6f5a2e;line-height:1.75}
+.notice .tx b{color:#54431f;font-weight:700}
+.notice ul{margin:6px 0 0;padding-left:17px}
+.notice li{margin-bottom:3px}
+
+/* CTA */
+.cta{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:15px;border-radius:9px;border:0;cursor:pointer;
+  background:var(--brand);color:#fff;font-size:15.5px;font-weight:600;
+  text-decoration:none;transition:background .15s;
+  -webkit-appearance:none;
+}
+.cta:hover{background:var(--brand-d)}
+.cta svg{width:17px;height:17px}
+.cta.sec{
+  background:#fff;color:var(--brand);border:1px solid var(--brand);
+  margin-top:10px;
+}
+.cta.sec:hover{background:var(--brand-l)}
+.dfoot{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;padding:4px 12px 0}
+
+/* ═══ 说明页 ═══ */
+.page{max-width:760px;margin:0 auto;padding:18px 16px calc(100px + env(safe-area-inset-bottom))}
+.page .h{font-size:19px;font-weight:700;margin:0 0 6px}
+.page .sub{font-size:13.5px;color:var(--muted);margin:0 0 18px;line-height:1.7}
+.sec{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:17px;margin-bottom:12px}
+.sec h3{font-size:15px;font-weight:700;margin:0 0 9px;display:flex;align-items:center;gap:8px}
+.sec h3 .n{
+  width:20px;height:20px;border-radius:50%;background:var(--brand-l);color:var(--brand);
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;
+}
+.sec p{font-size:14px;color:var(--ink2);line-height:1.8;margin:0 0 9px}
+.sec p:last-child{margin-bottom:0}
+.sec ul{margin:8px 0 0;padding-left:19px}
+.sec li{font-size:14px;color:var(--ink2);line-height:1.8;margin-bottom:3px}
+.sec code{
+  background:#f0f2ec;padding:1px 5px;border-radius:3px;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12.5px;color:#4a6b52;
+}
+
+/* ═══ 找队友 ═══ */
+.tm{display:grid;gap:11px}
+.tm a{
+  display:flex;align-items:center;gap:13px;background:#fff;
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:15px 16px;text-decoration:none;color:inherit;transition:border-color .15s,background .15s;
+}
+.tm a:hover{border-color:#c4cfc6;background:#fdfdfb}
+.tm .ico{
+  width:42px;height:42px;border-radius:9px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+}
+.tm .ico.p{background:var(--brand-l);color:var(--brand)}
+.tm .ico.s{background:var(--gold-bg);color:var(--gold)}
+.tm .ico svg{width:20px;height:20px}
+.tm .tt{flex:1;min-width:0}
+.tm .tt b{display:block;font-size:15px;font-weight:700;margin-bottom:2px}
+.tm .tt span{font-size:12.5px;color:var(--muted);line-height:1.5}
+.tm .arw{color:#b9c4bb;flex:none}
+.tm .arw svg{width:18px;height:18px}
+
+/* ═══ 底部导航 ═══ */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  display:flex;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+  width:100%;max-width:100vw;
+}
+.nav a{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:9px 0 8px;text-decoration:none;color:#9aa89f;
+  font-size:11px;font-weight:600;transition:color .15s;
+}
+.nav a svg{width:22px;height:22px}
+.nav a.on{color:var(--brand)}
+
+/* ═══ Toast ═══ */
+.toast{
+  position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(12px);
+  background:#33423a;color:#fff;font-size:13.5px;padding:11px 19px;
+  border-radius:8px;opacity:0;pointer-events:none;transition:all .22s;
+  max-width:88%;text-align:center;z-index:90;line-height:1.5;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ═══ 桌面端 / 平板 ═══ */
+/* 内容最大宽度：超宽屏下居中，避免文字行过长难以阅读 */
+.shell{max-width:1320px;margin:0 auto;width:100%}
+.shell-wide{max-width:100%}
+
+@media (min-width:600px){
+  .list{padding:6px 24px calc(100px + env(safe-area-inset-bottom));grid-template-columns:repeat(2,1fr);gap:12px}
+  /* 平板起 chips 换行展开 */
+  .chips{flex-wrap:wrap;overflow:visible}
+  .chips-wrap::after{display:none}
+  .topbar{padding:26px 24px 22px}
+  .toolbar{padding:12px 24px 10px}
+  .meta{padding:13px 24px 4px}
+  .legend{padding:0 24px 8px}
+  .page,.detail{max-width:860px}
+}
+
+@media (min-width:900px){
+  .topbar{padding:32px 40px 26px}
+  .topbar h1{font-size:30px}
+  .topbar .tag{font-size:14px}
+  .toolbar{padding:13px 40px 11px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .search{flex:1;min-width:280px;max-width:460px}
+  .seg{flex:none;margin-top:0;width:250px}
+  /* 宽屏下 chips 换行展开，一次看全 */
+  .chips{flex:1 1 100%;margin-top:2px;flex-wrap:wrap;overflow:visible}
+  .chips-wrap::after{display:none}
+  .meta{padding:14px 40px 4px}
+  .legend{padding:0 40px 8px}
+  /* 桌面端同样保留底部导航留白 */
+  .list{padding:8px 40px calc(100px + env(safe-area-inset-bottom));grid-template-columns:repeat(2,1fr);gap:14px}
+  .page,.detail{max-width:900px}
+  .dbody{padding:0 24px}
+  .card h3{font-size:16.5px}
+  .nav{left:50%;transform:translateX(-50%);max-width:900px;border:1px solid var(--line);border-bottom:0}
+  .toast{bottom:100px}
+}
+
+/* 三列：1180px 起，卡片宽度控制在 380-420px 的舒适区间 */
+@media (min-width:1180px){
+  .list{grid-template-columns:repeat(3,1fr)}
+}
+/* 超宽屏：四列，避免单卡过宽 */
+@media (min-width:1700px){
+  .list{grid-template-columns:repeat(4,1fr)}
+  .shell{max-width:1560px}
+}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .nav,.toolbar,.seg,.chips,.topbar::after{display:none!important}
+  body{background:#fff}
+  .card{break-inside:avoid;box-shadow:none;border:1px solid #bbb}
+  .list{grid-template-columns:1fr}
+  .topbar{background:#fff;color:#000;border-bottom:2px solid #000}
+  .topbar h1{color:#000}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ 赛事首页 ══════════ -->
+<main id="v-home"><div class="shell">
+  <header class="topbar">
+    <div class="school">郑州升达经贸管理学院</div>
+    <h1>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 4h8v6a4 4 0 01-8 0z"/><path d="M8 5H5a3 3 0 003 4M16 5h3a3 3 0 01-3 4M10 17h4M12 17v3M9 20h6"/></svg>
+      升达赛事汇
+    </h1>
+    <div class="tag">学科竞赛 · 创新创业 · 全部校级以上赛事，直达官方通知</div>
+    <div class="demo" id="demoFlag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>
+      演示版 · 赛程以主办方官方通知为准
+    </div>
+    <div class="stat">
+      <span>收录 <b id="statTotal">0</b> 项</span>
+      <span>考试 <b id="statExam">0</b></span>
+      <span>国家级 <b id="statNat">0</b></span>
+      <span>省级 <b id="statProv">0</b></span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search" id="searchWrap">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <label class="sr" for="q">搜索比赛</label>
+      <input id="q" type="search" placeholder="搜比赛名称、简称或主办单位" autocomplete="off" enterkeyhint="search">
+      <button class="clr" id="qClear" type="button" aria-label="清空搜索">×</button>
+    </div>
+
+    <div class="seg" role="group" aria-label="按级别筛选">
+      <button type="button" data-lv="全部" class="on">全部</button>
+      <button type="button" data-lv="国家级">国家级</button>
+      <button type="button" data-lv="省级">省级</button>
+      <button type="button" data-lv="校内">校内</button>
+    </div>
+
+    <div class="chips-wrap" id="chipsWrap"><div class="chips" id="chips" role="group" aria-label="按学院分区筛选"></div></div>
+  </div>
+
+  <div class="meta">
+    <span>共 <b id="cnt">0</b> 项赛事</span>
+    <button class="reset" id="reset" type="button" style="visibility:hidden">清除筛选</button>
+  </div>
+
+  <div class="legend">
+    <span><i class="k nat"></i>国家级</span>
+    <span><i class="k prov"></i>省级</span>
+    <span><i class="k school"></i>校内</span>
+    <span><i class="k ind"></i>行业级</span>
+    <span class="tip">级别依据学校奖励办法（达院字〔2017〕111号）</span>
+  </div>
+
+  <div class="list" id="list"></div>
+</div></main>
+
+<!-- ══════════ 详情 ══════════ -->
+<main id="v-detail" hidden><div class="shell shell-wide">
+  <div class="detail" id="detailRoot"></div>
+</div></main>
+
+<!-- ══════════ 找队友 ══════════ -->
+<main id="v-team" hidden>
+  <div class="page">
+    <h2 class="h">找队友</h2>
+    <p class="sub">先把比赛定下来，再通过校内收集表发布组队需求。信息只在校内流转。</p>
+
+    <div class="tm">
+      <a href="#" id="lnkForm">
+        <span class="ico p">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
+        <span class="tt"><b>发布组队需求</b><span>填写姓名、学院、专业、联系方式、比赛名称、缺什么队友</span></span>
+        <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span>
+      </a>
+      <a href="#" id="lnkSheet">
+        <span class="ico s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>
+        </span>
+        <span class="tt"><b>查看大家的组队留言</b><span>只读汇总表，可直接看到已发布的组队需求</span></span>
+        <span class="arw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span>
+      </a>
+    </div>
+
+    <div class="sec" style="margin-top:12px">
+      <h3>怎么用</h3>
+      <ul>
+        <li>在企业微信「工作台」打开本应用，点击上面的<strong>发布组队需求</strong>。</li>
+        <li>收集表设置为「仅企业内成员可填写」，校外人员无法提交。</li>
+        <li>填完自动汇总，其他同学在<strong>查看组队留言</strong>里就能看到。</li>
+        <li>想联系对方，先在企业微信里核实身份再加好友。</li>
+      </ul>
+    </div>
+
+    <div class="notice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 9v4M12 16.5v.5"/></svg>
+      <div class="tx">
+        <b>防诈骗提醒：</b>组队不涉及任何费用。凡以「报名费」「材料费」「保证金」「培训费」为名要求转账、垫付，或让你点击陌生链接、下载不明 App 的，一律是诈骗。<br>
+        请立即停止联系，并向项目组或学校保卫处举报。
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ══════════ 说明 ══════════ -->
+<main id="v-help" hidden>
+  <div class="page">
+    <h2 class="h">使用说明</h2>
+    <p class="sub">关于这个网站怎么用、数据从哪来、要改怎么改。</p>
+
+    <div class="sec">
+      <h3><span class="n">1</span>这些比赛从哪来</h3>
+      <p>全部来自<strong>《郑州升达经贸管理学院 100 项竞赛官方文件汇编》</strong>，逐项取自主办方官网或官方主办单位页面，下载日期 2026-10-10。</p>
+      <p>本站只收录<strong>校级以上、有官方文件可查证</strong>的赛事，并标注赛事级别（国家级 / 省级）与主办单位，方便你判断含金量。</p>
+    </div>
+
+    <div class="sec">
+      <h3><span class="n">2</span>为什么没有写截止时间</h3>
+      <p>每届赛事的报名时间由主办方当年通知决定，常会调整、延期或改期。写死日期容易让你按过期时间去报名。</p>
+      <p>所以本站<strong>只给官方通知入口</strong>：点开比赛详情里的「打开官方通知」，看到的永远是最新、最准的一手信息。</p>
+    </div>
+
+    <div class="sec">
+      <h3><span class="n">3</span>国家级 / 省级 怎么分</h3>
+      <p>按<strong>主办单位层级</strong>划分，不是按比赛难度：</p>
+      <ul>
+        <li><strong>国家级</strong>：教育部、工信部、共青团中央、全国学联、中国科协等部委，或全国性学会、行业协会主办。</li>
+        <li><strong>省级</strong>：河南省教育厅、省体育局、省人社厅等省级厅局主办。</li>
+      </ul>
+      <p>同一个比赛可能既有国赛也有省赛，本站按索引收录的那一项标注。</p>
+    </div>
+
+    <div class="sec">
+      <h3><span class="n">4</span>怎么更新比赛（维护者看）</h3>
+      <p>用记事本打开 <code>index.html</code>，找到底部 <code>var COMPETITIONS = [ ... ]</code>，照着已有条目增删：</p>
+      <p><code>{ name, short, category, organizer, level, orgTier, url, src }</code></p>
+      <ul>
+        <li><code>category</code> 填学院规范全称（如「会计学院」），或「公共比赛」。</li>
+        <li><code>level</code> 只能填「国家级」或「省级」。</li>
+        <li><code>url</code> 必须是主办方官方域名，不要填培训机构或中介页面。</li>
+        <li>列表按书写顺序显示，想调顺序就整条剪切移动。</li>
+      </ul>
+    </div>
+
+    <div class="sec">
+      <h3><span class="n">5</span>接入企业微信（维护者看）</h3>
+      <ul>
+        <li>把 <code>index.html</code> 交给信息中心，由学校服务器托管并配置域名。</li>
+        <li>以学校名义完成 ICP 备案，通过后把备案号填到文件底部 <code>var ICP_NO</code>。</li>
+        <li>企业微信管理后台建自建应用，主页网址填站点地址。</li>
+        <li>可见范围按「项目组 → 试点学院 → 全校」逐步放开。</li>
+        <li>建好收集表后，把两个链接填到 <code>FORM_URL</code> 与 <code>SHEET_URL</code>。</li>
+      </ul>
+    </div>
+
+    <div class="sec">
+      <h3><span class="n">6</span>发现问题怎么反馈</h3>
+      <ul>
+        <li>比赛信息有误、想补充比赛：联系所在学院联络员或项目组。</li>
+        <li>页面打不开、样式异常：联系项目组技术维护。</li>
+        <li>遇到可疑组队信息：先停止联系，再报项目组或学校保卫处。</li>
+      </ul>
+    </div>
+
+    <p class="dfoot" id="icpLine" style="margin-top:20px"></p>
+  </div>
+</main>
+
+<nav class="nav" aria-label="主导航">
+  <a href="#/home" data-r="home" class="on">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 10l8-6 8 6v9a1 1 0 01-1 1h-5v-6h-4v6H5a1 1 0 01-1-1z"/></svg>
+    赛事
+  </a>
+  <a href="#/team" data-r="team">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><path d="M16 5.2a3 3 0 010 5.6M17.5 14.6c1.7.5 2.9 1.8 3.2 3.9"/></svg>
+    找队友
+  </a>
+  <a href="#/help" data-r="help">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 015 .9c0 1.7-2.4 2-2.4 3.6"/><circle cx="12" cy="17" r=".7" fill="currentColor" stroke="none"/></svg>
+    说明
+  </a>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ★ 数据区 —— 要改比赛就改这里，其余部分不用动
+   字段：
+     name       比赛全称
+     short      简称（可空）
+     category   分区：学院全称 或 "公共比赛"
+     organizer  主办单位
+     level      赛事级别："国家级" / "省级"
+     orgTier    主办层级（内部用，不影响显示）
+     url        主办方官方通知链接
+     src        收录依据（"成功"=已下载官方文件 / "网页存档"=官方页面存档）
+   ═══════════════════════════════════════════════════════════════ */
+var COMPETITIONS = [
+  {
+    "no": 1000,
+    "name": "全国大学英语四、六级考试（CET）",
+    "short": "四六级 / CET",
+    "category": "公共考试",
+    "organizer": "教育部教育考试院",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://cet.neea.edu.cn/",
+    "src": "官方考试项目页",
+    "kind": "考试",
+    "note": "笔试每年 6 月、12 月各一次；口试每年 5 月、11 月各一次。报名由各省级考试机构组织，通常在本校教务系统或省考试院网站报名。",
+    "orgType": "国家行政部门",
+    "levelBasis": "教育部教育考试院主办的国家级考试项目"
+  },
+  {
+    "no": 1001,
+    "name": "全国计算机等级考试（NCRE）",
+    "short": "计算机二级 / NCRE",
+    "category": "公共考试",
+    "organizer": "教育部教育考试院",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://ncre.neea.edu.cn/",
+    "src": "官方考试项目页",
+    "kind": "考试",
+    "note": "每年 3 月、9 月开考（部分省份另设 12 月）。分一至四级，二级最为常见，是不少专业毕业与就业的门槛证书。",
+    "orgType": "国家行政部门",
+    "levelBasis": "教育部教育考试院主办的国家级考试项目"
+  },
+  {
+    "no": 1002,
+    "name": "中小学教师资格考试（NTCE）",
+    "short": "教资 / NTCE",
+    "category": "公共考试",
+    "organizer": "教育部教育考试院",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://ntce.neea.edu.cn/",
+    "src": "官方考试项目页",
+    "kind": "考试",
+    "note": "分笔试与面试两段，每年上下半年各一次。师范类及有志从教的学生需关注。",
+    "orgType": "国家行政部门",
+    "levelBasis": "教育部教育考试院主办的国家级考试项目"
+  },
+  {
+    "no": 1003,
+    "name": "全国英语等级考试（PETS）",
+    "short": "PETS",
+    "category": "公共考试",
+    "organizer": "教育部教育考试院",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://pets.neea.edu.cn/",
+    "src": "官方考试项目页",
+    "kind": "考试",
+    "note": "面向社会考生的英语水平考试，分一至五级。部分单位招聘认可，也可替代部分英语能力证明。",
+    "orgType": "国家行政部门",
+    "levelBasis": "教育部教育考试院主办的国家级考试项目"
+  },
+  {
+    "no": 1004,
+    "name": "普通话水平测试（PSC）",
+    "short": "普通话",
+    "category": "公共考试",
+    "organizer": "国家语言文字工作委员会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.cltt.org/",
+    "src": "官方测试网站",
+    "kind": "考试",
+    "note": "教师资格认定的必备条件之一。测试由各省语委办组织，本校通常设有考点或统一组织报名。",
+    "orgType": "国家行政部门",
+    "levelBasis": "教育部教育考试院主办的国家级考试项目"
+  },
+  {
+    "no": 1,
+    "name": "中国国际大学生创新大赛（原中国\"互联网+\"大学生创新创业大赛）",
+    "short": "互联网+/国创赛",
+    "category": "公共比赛",
+    "organizer": "教育部等十二部门+江苏省人民政府",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.moe.gov.cn/srcsite/A08/s5672/202607/t20260731_1445670.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 2,
+    "name": "\"挑战杯\"全国大学生课外学术科技作品竞赛（大挑）",
+    "short": "大挑",
+    "category": "公共比赛",
+    "organizer": "共青团中央/中国科协/教育部/全国学联",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://news.youth.cn/gn/202511/t20251105_16330432.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 3,
+    "name": "\"挑战杯\"中国大学生创业计划竞赛（小挑/创青春）",
+    "short": "小挑",
+    "category": "公共比赛",
+    "organizer": "共青团中央/中国科协/教育部/全国学联",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.tiaozhanbei.net/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 6,
+    "name": "全国大学生电子设计竞赛（NUEDC）",
+    "short": "电赛",
+    "category": "公共比赛",
+    "organizer": "教育部高教司、工信部人教司(全国组委会)；陕西赛区组委会承办",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.nuedc-training.com.cn/index/news/details/new_id/333",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 8,
+    "name": "全国大学生广告艺术大赛",
+    "short": "大广赛",
+    "category": "公共比赛",
+    "organizer": "教育部高教司指导、大广赛组委会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.sun-ada.net/about_intrs2.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 10,
+    "name": "全国大学生物流设计大赛",
+    "short": "物流设计",
+    "category": "公共比赛",
+    "organizer": "中国物流与采购联合会（教育部质量工程赛事）",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://dspt.clppx.org.cn/pkIndex/wlsj/wlsjdshome",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 12,
+    "name": "全国职业院校技能大赛",
+    "short": "职校技能大赛",
+    "category": "公共比赛",
+    "organizer": "教育部等三十五部门",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.vcsc.org.cn/careerPolicy",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 14,
+    "name": "全国大学生运动会",
+    "short": "大运会",
+    "category": "公共比赛",
+    "organizer": "教育部学生体育协会联合秘书处（中国大学生体育协会）",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.sports.edu.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 17,
+    "name": "全国大学生市场调查与分析大赛",
+    "short": "正大杯·市调赛",
+    "category": "公共比赛",
+    "organizer": "中国商业统计学会/教育部统计学类教指委",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.china-cssc.org/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 18,
+    "name": "中国大学生服务外包创新创业大赛",
+    "short": "服务外包",
+    "category": "公共比赛",
+    "organizer": "教育部、商务部、无锡市人民政府(全国组委会)",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.fwwb.org.cn/news/show/396",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 19,
+    "name": "两岸新锐设计竞赛·华灿奖",
+    "short": "华灿奖",
+    "category": "公共比赛",
+    "organizer": "中国高等教育学会等",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.huacan.org/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 29,
+    "name": "中国大学生人力资源职业技能大赛",
+    "short": "HR技能大赛",
+    "category": "公共比赛",
+    "organizer": "中国人才交流协会/中国劳动关系学院/国投人力",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.cnhru.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 32,
+    "name": "全国大学生艺术展演",
+    "short": "艺术展演",
+    "category": "公共比赛",
+    "organizer": "教育部",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.moe.gov.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 81,
+    "name": "全国大学生机器人大赛RoboMaster（机甲大师）",
+    "short": "RoboMaster",
+    "category": "公共比赛",
+    "organizer": "共青团中央、全国学联、深圳市大疆创新科技有限公司(RoboMaster组委会)",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.robomaster.com/zh-CN/resource/pages/announcement/1888",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 84,
+    "name": "\"一带一路\"暨金砖国家技能发展与技术创新大赛",
+    "short": "金砖大赛",
+    "category": "公共比赛",
+    "organizer": "金砖国家工商理事会/中国组委会等",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.brskills.com/jzzy/index.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "赛事组委会",
+    "levelBasis": "由赛事组委会主办，属全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 100,
+    "name": "全国大学生模拟法庭竞赛",
+    "short": "模拟法庭",
+    "category": "公共比赛",
+    "organizer": "教育部高教司",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.moe.gov.cn/s78/A08/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 34,
+    "name": "河南省大学生科技文化艺术节",
+    "short": "省科技文化艺术节",
+    "category": "公共比赛",
+    "organizer": "河南省教育厅/团省委",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 98,
+    "name": "会长奖学金",
+    "short": "会长奖学金",
+    "category": "公共比赛",
+    "organizer": "升达校内奖项",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 9,
+    "name": "全国大学生电子商务\"创新、创意及创业\"挑战赛",
+    "short": "三创赛",
+    "category": "创新创业教育学院",
+    "organizer": "教育部电子商务类教指委等",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.3chuang.net/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 13,
+    "name": "全国大学生创新创业训练计划年会展示（国创年会）",
+    "short": "大创年会",
+    "category": "创新创业教育学院",
+    "organizer": "教育部指导/国创计划秘书处+南京大学",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://gjcxcy.bjtu.edu.cn/NoticeBulletin.aspx?0EB816D0E1EB2C79DCE3F86E2EFC9F47",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 22,
+    "name": "全国高校商业精英挑战赛",
+    "short": "商业精英挑战赛",
+    "category": "创新创业教育学院",
+    "organizer": "中国贸促会商业行业委员会",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://cubec.org.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 23,
+    "name": "\"学创杯\"全国大学生创业综合模拟大赛",
+    "short": "学创杯",
+    "category": "创新创业教育学院",
+    "organizer": "高等学校国家级实验教学示范中心联席会等",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "http://www.xcbds.com/cyds/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 41,
+    "name": "全国大学生职业规划大赛",
+    "short": "职规赛",
+    "category": "创新创业教育学院",
+    "organizer": "教育部",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://hudong.moe.gov.cn/srcsite/A15/s7063/202510/t20251021_1417550.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 55,
+    "name": "全国企业模拟竞赛大赛(企业竞争模拟)",
+    "short": "企模",
+    "category": "创新创业教育学院",
+    "organizer": "中国管理现代化研究会决策模拟专委会",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "http://www.ibizsim.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 57,
+    "name": "全国大学生企业数字化管理创新大赛",
+    "short": "企业数字化管理",
+    "category": "创新创业教育学院",
+    "organizer": "金蝶精一(公益赛事)",
+    "level": "行业级",
+    "orgTier": "企业",
+    "url": "https://kone.kingdee.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 76,
+    "name": "河南省\"豫你携手·创赢未来\"大学生创新创业大赛",
+    "short": "豫你携手",
+    "category": "创新创业教育学院",
+    "organizer": "河南省教育厅等",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://cxcyjyxy.shengda.edu.cn/info/1073/3465.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 73,
+    "name": "\"升达杯\"大学生创新创业大赛（国创赛校赛）",
+    "short": "升达杯",
+    "category": "创新创业教育学院",
+    "organizer": "郑州升达经贸管理学院",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "https://cxcyjyxy.shengda.edu.cn/info/1072/3287.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "stages": [
+      "校级",
+      "省级",
+      "国家级"
+    ],
+    "stageBasis": "名称标注「国创赛校赛」：本项为国家级赛事的校内选拔环节",
+    "topLevel": "国家级",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 86,
+    "name": "ERP沙盘\"新生杯\"(院级)",
+    "short": "ERP新生杯",
+    "category": "创新创业教育学院",
+    "organizer": "升达院级校赛",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 25,
+    "name": "全国大学生会计信息化技能大赛",
+    "short": "会计信息化",
+    "category": "会计学院",
+    "organizer": "工信部人才交流中心/新道科技",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 27,
+    "name": "全国税法知识竞赛",
+    "short": "税法竞赛",
+    "category": "会计学院",
+    "organizer": "全国智慧税务行业产教融合共同体",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://zhsw.gssrz.com/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 30,
+    "name": "\"中金所杯\"全国大学生金融知识大赛",
+    "short": "中金所杯",
+    "category": "会计学院",
+    "organizer": "中国金融期货交易所+中国证券业/期货业/基金业协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://e-cffex.com.cn/mobile/csxz/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 45,
+    "name": "\"科云杯\"全国大学生财会职业能力大赛",
+    "short": "科云杯",
+    "category": "会计学院",
+    "organizer": "中国商业会计学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://match.xmkeyun.com.cn/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 46,
+    "name": "全国大学生数智化业财融合竞赛",
+    "short": "业财融合",
+    "category": "会计学院",
+    "organizer": "中国商业会计学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://yyxbk.99onez.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 47,
+    "name": "全国大学生AI财经案例大赛",
+    "short": "AI财经案例",
+    "category": "会计学院",
+    "organizer": "待核实",
+    "level": "待核实",
+    "orgTier": "其他",
+    "url": "",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "主办单位待核实",
+    "levelBasis": "学校竞赛总表标注「待核实」，无法按主办单位性质判定级别"
+  },
+  {
+    "no": 48,
+    "name": "全国审计精英挑战赛",
+    "short": "审计精英",
+    "category": "会计学院",
+    "organizer": "中国审计学会审计教育分会/南京审计大学",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "http://www.fostor.com/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 49,
+    "name": "高等学校数智制造商业综合能力大赛",
+    "short": "数智制造商业",
+    "category": "会计学院",
+    "organizer": "教育部工商管理教指委指导/中国商业会计学会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.cbaac.com.cn/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 50,
+    "name": "\"郑商所杯\"全国大学生金融模拟交易大赛",
+    "short": "郑商所杯",
+    "category": "会计学院",
+    "organizer": "郑州商品交易所/中国期货业协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.czce.com.cn/cn/col/college/index.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 51,
+    "name": "\"东方财富杯\"全国大学生金融挑战赛",
+    "short": "东方财富杯",
+    "category": "会计学院",
+    "organizer": "共青团中央青年发展部/东方财富",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://young.eastmoney.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 52,
+    "name": "\"工行杯\"全国大学生金融科技创新大赛",
+    "short": "工行杯",
+    "category": "会计学院",
+    "organizer": "中国工商银行",
+    "level": "行业级",
+    "orgTier": "企业",
+    "url": "https://www.gonghangbei.com/dsjs.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 53,
+    "name": "全国数字贸易技能大赛(国际贸易赛项)",
+    "short": "数字贸易技能",
+    "category": "会计学院",
+    "organizer": "中国对外经济贸易统计学会等",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "http://www.cadl.org.cn/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 54,
+    "name": "全国大学生数字贸易综合能力大赛",
+    "short": "数字贸易综合能力",
+    "category": "会计学院",
+    "organizer": "全球数字贸易博览会青年人才平台",
+    "level": "行业级",
+    "orgTier": "企业",
+    "url": "https://cbecbe.com/index.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 56,
+    "name": "全国本科院校税收风险管控案例大赛",
+    "short": "税收风险案例",
+    "category": "会计学院",
+    "organizer": "赛事组委会(高教学会A类经管类)",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "http://ssfkds.moocollege.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "赛事组委会",
+    "levelBasis": "由赛事组委会主办，属全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 62,
+    "name": "\"亿学杯\"跨境数字营销挑战赛（iCAN专项）",
+    "short": "亿学杯跨境",
+    "category": "会计学院",
+    "organizer": "iCAN全国大学生创新创业大赛组委会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.g-ican.com/news/details?id=241",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "高校（全国赛承办）",
+    "levelBasis": "由高校承办的全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 82,
+    "name": "\"网中网杯\"全国大学生财务决策大赛",
+    "short": "网中网杯",
+    "category": "会计学院",
+    "organizer": "网中网/厦门大学",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://www.wangzhongwang.com/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "高校（全国赛承办）",
+    "levelBasis": "由高校承办的全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 83,
+    "name": "\"科云杯\"企业税务及经营管理技能大赛",
+    "short": "科云税务赛",
+    "category": "会计学院",
+    "organizer": "中国商业会计学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://match.xmkeyun.com.cn/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 85,
+    "name": "\"注册会计师杯\"财会知识大赛",
+    "short": "注会杯",
+    "category": "会计学院",
+    "organizer": "中国注册会计师协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.cicpa.org.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 97,
+    "name": "全国新零售买手创业实战大赛",
+    "short": "新零售买手",
+    "category": "会计学院",
+    "organizer": "待核实",
+    "level": "待核实",
+    "orgTier": "其他",
+    "url": "",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "主办单位待核实",
+    "levelBasis": "学校竞赛总表标注「待核实」，无法按主办单位性质判定级别"
+  },
+  {
+    "no": 15,
+    "name": "\"西门子杯\"中国智能制造挑战赛",
+    "short": "西门子杯",
+    "category": "机电学院",
+    "organizer": "中国自动化学会、教育部高等学校自动化类教指委、西门子(中国)有限公司",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://www.siemenscup-cimc.org.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 77,
+    "name": "全国大学生嵌入式芯片与系统设计竞赛",
+    "short": "嵌入式芯片大赛",
+    "category": "机电学院",
+    "organizer": "教育部高等学校电子信息类专业教指委、中国半导体行业协会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.socchina.net/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 79,
+    "name": "\"信捷杯\"全国大学生智能制造创新大赛",
+    "short": "信捷杯",
+    "category": "机电学院",
+    "organizer": "中国自动化学会、江南大学、无锡信捷电气",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.jiangnan.edu.cn/index/xwdt/902.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 33,
+    "name": "河南省大学生机器人竞赛",
+    "short": "省机器人竞赛",
+    "category": "机电学院",
+    "organizer": "河南省科学技术协会、河南省教育厅、河南省科技厅(河南省高等学校大学生竞赛管理服务中心发布)",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://jsgl.htu.edu.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 87,
+    "name": "河南工业软件创新大赛",
+    "short": "工业软件大赛",
+    "category": "机电学院",
+    "organizer": "河南省高等教育学会",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://jsgl.htu.edu.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 7,
+    "name": "全国大学生结构设计竞赛",
+    "short": "结构设计",
+    "category": "建筑工程学院",
+    "organizer": "住房和城乡建设部、中国土木工程学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "http://www.structurecontest.com/home",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 24,
+    "name": "全国高等院校学生“斯维尔杯”建筑信息模型（BIM）应用技能大赛",
+    "short": "斯维尔杯BIM",
+    "category": "建筑工程学院",
+    "organizer": "中国建设教育协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://www.ccen.com.cn/info/1150/5772.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 70,
+    "name": "国际高校 BIM 毕业设计创新大赛",
+    "short": "BIM毕设",
+    "category": "建筑工程学院",
+    "organizer": "中国土木工程学会建筑市场与招标投标研究分会、广联达",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://gxbsxs.glodonedu.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 89,
+    "name": "全国数字建筑创新应用大赛",
+    "short": "数字建筑大赛",
+    "category": "建筑工程学院",
+    "organizer": "中国建设教育协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://bisai.ccen.com.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 90,
+    "name": "“品茗杯”全国高校BIM应用毕业设计大赛",
+    "short": "品茗杯",
+    "category": "建筑工程学院",
+    "organizer": "中国建设教育协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://ds.pmsjy.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 91,
+    "name": "“龙图杯”全国BIM大赛",
+    "short": "龙图杯",
+    "category": "建筑工程学院",
+    "organizer": "中国图学学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.cgn.net.cn/cms/show.action?code=publish_4028801c5e28e7cc015f764919d603e1&siteid=100000&newsid=310eac83c8674ea7b5a85b36a9c36afe&channelid=0000000021",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 92,
+    "name": "“中装杯”全国大学生环境设计大赛",
+    "short": "中装杯",
+    "category": "建筑工程学院",
+    "organizer": "中国建筑装饰协会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.cbda.cn/special/special616/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 71,
+    "name": "“建美中原”河南省大学生建筑设计大赛",
+    "short": "建美中原",
+    "category": "建筑工程学院",
+    "organizer": "河南省高等教育学会",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://jsgl.htu.edu.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 88,
+    "name": "河南省大学生结构力学竞赛",
+    "short": "结构力学竞赛",
+    "category": "建筑工程学院",
+    "organizer": "河南省力学学会",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://tj.haut.edu.cn/info/1092/19193.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 5,
+    "name": "全国大学生数学建模竞赛（CUMCM）",
+    "short": "数学建模/数模",
+    "category": "数学与信息科学学院",
+    "organizer": "中国工业与应用数学学会(全国组委会)",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.mcm.edu.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 16,
+    "name": "全国大学生先进成图技术与产品信息建模创新大赛",
+    "short": "成图大赛",
+    "category": "数学与信息科学学院",
+    "organizer": "教育部高等学校工程图学课程教学指导委员会、中国图学学会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "http://www.chengtudasai.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 26,
+    "name": "全国大学生数学竞赛",
+    "short": "数学竞赛",
+    "category": "数学与信息科学学院",
+    "organizer": "中国数学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.cmathc.org.cn/tzgg/201.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 75,
+    "name": "“广亚杯”数学竞赛（校级）",
+    "short": "广亚杯",
+    "category": "数学与信息科学学院",
+    "organizer": "郑州升达经贸管理学院",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "https://www.shengda.edu.cn/info/1024/66279.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 36,
+    "name": "河南省学生体育舞蹈锦标赛",
+    "short": "省体育舞蹈",
+    "category": "体育学院",
+    "organizer": "河南省教育厅、河南省体育局",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://m.jyt.henan.gov.cn/2026/05-27/3359077.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 37,
+    "name": "河南省定向越野锦标赛",
+    "short": "省定向越野",
+    "category": "体育学院",
+    "organizer": "河南省教育厅、河南省体育局",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://wgtlj.anyang.gov.cn/2025/11-24/2494495.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 38,
+    "name": "河南省大学生排球联赛",
+    "short": "省排球联赛",
+    "category": "体育学院",
+    "organizer": "河南省教育厅",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://www.henetc.edu.cn/info/1090/15636.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 39,
+    "name": "河南省大学生足球联赛",
+    "short": "省足球联赛",
+    "category": "体育学院",
+    "organizer": "河南省教育厅、河南省体育局",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://m.jyt.henan.gov.cn/2026/03-24/3336672.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 40,
+    "name": "河南省大学生篮球联赛",
+    "short": "省篮球联赛",
+    "category": "体育学院",
+    "organizer": "河南省教育厅、河南省体育局",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://www5.zzu.edu.cn/tyx/info/1173/4897.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 72,
+    "name": "河南省运动会学生组（含“省长杯”各单项）",
+    "short": "省运会/省长杯",
+    "category": "体育学院",
+    "organizer": "河南省教育厅、河南省体育局",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://m.jyt.henan.gov.cn/2023/06-14/2761309.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 11,
+    "name": "外研社·国才杯\"理解当代中国\"全国大学生外语能力大赛",
+    "short": "外研社·国才杯",
+    "category": "外国语学院",
+    "organizer": "外研社（FLTRP）",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://ucc.fltrp.com",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "出版社（教指委指导赛事）",
+    "levelBasis": "由外研社承办、教育部教指委指导，列入中国高等教育学会竞赛榜单"
+  },
+  {
+    "no": 28,
+    "name": "全国大学生英语竞赛（NECCS）",
+    "short": "大英赛/NECCS",
+    "category": "外国语学院",
+    "organizer": "国际英语外语教师协会中国分会/高教部",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://neccs.saikr.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由教育部及其直属平台主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 31,
+    "name": "POCIB全国外贸从业能力大赛",
+    "short": "POCIB",
+    "category": "外国语学院",
+    "organizer": "中国国际贸易学会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "http://winner.pocib.com/",
+    "src": "失败",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 58,
+    "name": "\"21世纪杯\"全国英语演讲比赛",
+    "short": "21世纪杯",
+    "category": "外国语学院",
+    "organizer": "中国日报社",
+    "level": "行业级",
+    "orgTier": "其他",
+    "url": "https://contest.i21st.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 59,
+    "name": "\"外教社杯\"全国高校学生跨文化能力大赛",
+    "short": "外教社杯",
+    "category": "外国语学院",
+    "organizer": "上海外语教育出版社",
+    "level": "行业级",
+    "orgTier": "行业组织",
+    "url": "https://ict.sflep.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 60,
+    "name": "ETTBL全国商务英语翻译比赛",
+    "short": "ETTBL",
+    "category": "外国语学院",
+    "organizer": "中国商业联合会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://www.ettbl.cn/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 61,
+    "name": "\"亿学杯\"商务英语实践技能大赛",
+    "short": "亿学杯",
+    "category": "外国语学院",
+    "organizer": "亿学杯组委会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://nbepsc.yixuecup.com/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "赛事组委会",
+    "levelBasis": "由赛事组委会主办，属全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 63,
+    "name": "\"中译杯\"全国口译大赛",
+    "short": "中译杯",
+    "category": "外国语学院",
+    "organizer": "中国翻译协会（TAC）",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "http://www.tac-online.org.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "全国性行业组织",
+    "levelBasis": "由全国性行业组织主办，属全国性赛事；计入国家级奖励建议以主办方文件为准"
+  },
+  {
+    "no": 64,
+    "name": "\"讲好河南故事\"外语演讲比赛",
+    "short": "讲好河南故事",
+    "category": "外国语学院",
+    "organizer": "河南省翻译协会等",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://jwc.zzuli.edu.cn/2026/0923/c3160a360020/page.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 99,
+    "name": "河南省翻译竞赛",
+    "short": "省翻译竞赛",
+    "category": "外国语学院",
+    "organizer": "河南省教育厅/省翻译协会",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 66,
+    "name": "全国大学生新媒体创意大赛",
+    "short": "新媒体创意",
+    "category": "文法学院",
+    "organizer": "全国大学生新媒体创意大赛组委会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://xwcbxy.nxu.edu.cn/info/1005/5415.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "高校（全国赛承办）",
+    "levelBasis": "由高校承办的全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 67,
+    "name": "全国大学生文学作品大赛",
+    "short": "文学作品",
+    "category": "文法学院",
+    "organizer": "全国大学生文学作品大赛组委会",
+    "level": "国家级",
+    "orgTier": "行业组织",
+    "url": "https://xwcb.zuel.edu.cn/2026/0930/c6951a440267/pagem.htm",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "高校（全国赛承办）",
+    "levelBasis": "由高校承办的全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 69,
+    "name": "河南广电绘本讲读大赛",
+    "short": "绘本讲读",
+    "category": "文法学院",
+    "organizer": "河南广播电视台",
+    "level": "行业级",
+    "orgTier": "其他",
+    "url": "https://www.shengda.edu.cn/info/1024/51079.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "企业/商业机构",
+    "levelBasis": "由企业或商业机构主办，不属于奖励办法说明1、2所列范围"
+  },
+  {
+    "no": 96,
+    "name": "VLOG短视频创作大赛",
+    "short": "VLOG大赛",
+    "category": "文法学院",
+    "organizer": "中国大学生在线",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://_univs.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由教育部及其直属平台主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 68,
+    "name": "河南省汉字大赛",
+    "short": "汉字大赛",
+    "category": "文法学院",
+    "organizer": "河南省教育厅/省语委办",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/2025/05-22/3160931.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 4,
+    "name": "ACM-ICPC国际大学生程序设计竞赛",
+    "short": "ICPC",
+    "category": "信息工程学院",
+    "organizer": "ICPC基金会(美国)",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://icpc.global/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "赛事组委会",
+    "levelBasis": "由赛事组委会主办，属全国性赛事；具体级别以主办方文件为准"
+  },
+  {
+    "no": 20,
+    "name": "中国高校计算机大赛（C4：大数据/天梯赛/移动应用/网络技术/AI创意）",
+    "short": "C4/中国高校计算机大赛",
+    "category": "信息工程学院",
+    "organizer": "中国计算机学会(CCF)",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 21,
+    "name": "蓝桥杯全国软件和信息技术专业人才大赛",
+    "short": "蓝桥杯",
+    "category": "信息工程学院",
+    "organizer": "工业和信息化部人才交流中心",
+    "level": "国家级",
+    "orgTier": "其他",
+    "url": "https://dasai.lanqiao.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 42,
+    "name": "中国大学生计算机设计大赛（4C/计设赛）",
+    "short": "计设赛/4C",
+    "category": "信息工程学院",
+    "organizer": "教育部高等学校计算机类专业教指委、中国大学生计算机设计大赛组委会",
+    "level": "国家级",
+    "orgTier": "部委",
+    "url": "https://jsjds.blcu.edu.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家行政部门及直属单位",
+    "levelBasis": "由国家行政部门或其直属单位主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 43,
+    "name": "CCPC中国大学生程序设计竞赛",
+    "short": "CCPC",
+    "category": "信息工程学院",
+    "organizer": "中国大学生程序设计竞赛组委会(CCF赞助)",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://ccpc.io/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 44,
+    "name": "全球校园人工智能算法精英大赛（AIC）",
+    "short": "AIC",
+    "category": "信息工程学院",
+    "organizer": "中国创造学会、百度智能云、AIC组委会",
+    "level": "国家级",
+    "orgTier": "全国学会",
+    "url": "https://www.aicomp.cn/notice/notice-1/3655.html",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "国家一级学会/教指委",
+    "levelBasis": "由国家一级学会或教指委主办，按奖励办法说明1认定为国家级"
+  },
+  {
+    "no": 78,
+    "name": "无人系统具身智能算法挑战赛（河南省选拔赛）",
+    "short": "具身智能挑战赛",
+    "category": "信息工程学院",
+    "organizer": "待核实(河南省选拔赛主办单位)",
+    "level": "待核实",
+    "orgTier": "省级厅局",
+    "url": "https://xgxy.shengda.edu.cn/info/1051/9001.htm",
+    "src": "失败",
+    "kind": "竞赛",
+    "stages": [
+      "省级",
+      "国家级"
+    ],
+    "stageBasis": "名称标注「河南省选拔赛」：本项为省级选拔环节",
+    "topLevel": "国家级",
+    "orgType": "主办单位待核实",
+    "levelBasis": "学校竞赛总表标注「待核实」，无法按主办单位性质判定级别"
+  },
+  {
+    "no": 74,
+    "name": "智能体创新应用大赛",
+    "short": "智能体大赛",
+    "category": "信息工程学院",
+    "organizer": "郑州升达经贸管理学院",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "https://www.shengda.edu.cn/info/1024/65216.htm",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 80,
+    "name": "\"码蹄杯\"程序设计大赛（省赛升达赛点）",
+    "short": "码蹄杯",
+    "category": "信息工程学院",
+    "organizer": "码蹄平台(郑州轻工业大学/升达赛点)",
+    "level": "校内",
+    "orgTier": "校内",
+    "url": "https://www.matiji.net/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "stages": [
+      "校级",
+      "省级"
+    ],
+    "stageBasis": "名称标注「省赛升达赛点」：本项为省级赛事在升达的赛点",
+    "topLevel": "省级",
+    "orgType": "本校主办",
+    "levelBasis": "本校主办或院级赛事，不适用校外竞赛奖励办法"
+  },
+  {
+    "no": 35,
+    "name": "\"河南之星\"设计艺术大赛",
+    "short": "河南之星",
+    "category": "艺术学院",
+    "organizer": "河南省美术家协会",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://www.hnmsj.com/",
+    "src": "成功",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 65,
+    "name": "中原广告艺术大赛",
+    "short": "中原广告",
+    "category": "艺术学院",
+    "organizer": "河南省教育厅",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/2025/09-02/3208261.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 93,
+    "name": "河南省\"洛神杯\"专业舞蹈展演",
+    "short": "洛神杯",
+    "category": "艺术学院",
+    "organizer": "河南省教育厅",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 94,
+    "name": "河南省大河风合唱音乐会",
+    "short": "大河风合唱",
+    "category": "艺术学院",
+    "organizer": "河南省教育厅",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "http://jyt.henan.gov.cn/",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "no": 95,
+    "name": "\"中原茶艺杯\"茶艺职业技能大赛",
+    "short": "中原茶艺杯",
+    "category": "艺术学院",
+    "organizer": "河南省人力资源和社会保障厅",
+    "level": "省级",
+    "orgTier": "省级厅局",
+    "url": "https://hrss.henan.gov.cn/2026/06-23/3368313.html",
+    "src": "网页存档",
+    "kind": "竞赛",
+    "orgType": "省级行政部门",
+    "levelBasis": "由省级行政管理部门主办，按奖励办法说明2认定为省级"
+  },
+  {
+    "name": "全国审计精英挑战赛等校内选拔赛（会计学院）",
+    "short": "审计精英校内选拔",
+    "category": "会计学院",
+    "organizer": "郑州升达经贸管理学院会计学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://kjxy.shengda.edu.cn/info/1163/9843.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本院主办，不适用校外竞赛奖励办法",
+    "evidence": "会计学院官网「学科竞赛」栏目 2024-10-14 报道《会计学院成功举办全国审计精英挑战赛等校内选拔赛》"
+  },
+  {
+    "name": "会计学院 ERP 沙盘校内选拔赛",
+    "short": "ERP沙盘校内选拔",
+    "category": "会计学院",
+    "organizer": "郑州升达经贸管理学院会计学院 ERP 沙盘协会",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://kjxy.shengda.edu.cn/info/1163/9798.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本院主办，不适用校外竞赛奖励办法",
+    "evidence": "会计学院官网「学科竞赛」栏目 2024-09-18 报道 ERP 沙盘协会完成数智化企业经营沙盘大赛河南省选拔赛"
+  },
+  {
+    "name": "“广亚杯”计算机知识竞赛",
+    "short": "广亚杯计算机",
+    "category": "信息工程学院",
+    "organizer": "郑州升达经贸管理学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://xgxy.shengda.edu.cn/info/1009/8896.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本校主办，不适用校外竞赛奖励办法",
+    "evidence": "信息工程学院官网通知公告 2026-06-12《第十九届“广亚杯”计算机知识竞赛获奖名单》，已办至第十九届"
+  },
+  {
+    "name": "“御网杯”网络安全大赛（校内选拔）",
+    "short": "御网杯",
+    "category": "信息工程学院",
+    "organizer": "郑州升达经贸管理学院信息工程学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://xgxy.shengda.edu.cn/info/1009/8889.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本院组织，不适用校外竞赛奖励办法",
+    "evidence": "信息工程学院官网通知公告 2026-06-08《关于第十届“御网杯”网络安全大赛线上挑战赛成绩公示的通知》，已办至第十届"
+  },
+  {
+    "name": "“码蹄杯”程序设计大赛省赛（升达赛点）",
+    "short": "码蹄杯升达赛点",
+    "category": "信息工程学院",
+    "organizer": "信息工程学院与工业元宇宙行业学院共同举办",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://xgxy.shengda.edu.cn/info/1051/8901.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本校承办省赛赛点，同时承担省级赛事组织",
+    "stages": [
+      "校级",
+      "省级"
+    ],
+    "stageBasis": "学院官网明确为「省赛（升达赛点）」，本校承办省级赛事的赛点",
+    "topLevel": "省级",
+    "evidence": "信息工程学院官网「学科竞赛」栏目 2026-06-12《信息工程学院与工业元宇宙行业学院共同举办2026年“码蹄杯”程序设计大赛省赛（升达赛点）》"
+  },
+  {
+    "name": "“蓝桥杯”电子类竞赛省赛（升达赛点）",
+    "short": "蓝桥杯升达赛点",
+    "category": "信息工程学院",
+    "organizer": "信息工程学院承办",
+    "level": "校内",
+    "orgType": "本校承办",
+    "url": "https://xgxy.shengda.edu.cn/info/1051/8690.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本校承办省赛赛点",
+    "stages": [
+      "校级",
+      "省级",
+      "国家级"
+    ],
+    "stageBasis": "学院官网明确为「省赛（升达赛点）」，蓝桥杯为校赛—省赛—国赛三级赛制",
+    "topLevel": "国家级",
+    "evidence": "信息工程学院官网「学科竞赛」栏目 2026-04-14《信息工程学院举办第十七届蓝桥杯全国软件和信息技术专业人才大赛电子类竞赛省赛（升达赛点）》"
+  },
+  {
+    "name": "郑州升达经贸管理学院英语单词大赛",
+    "short": "英语单词大赛",
+    "category": "外国语学院",
+    "organizer": "郑州升达经贸管理学院外国语学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://wyxy.shengda.edu.cn/info/1134/8800.htm",
+    "src": "学院官网通知",
+    "kind": "竞赛",
+    "levelBasis": "本院主办，不适用校外竞赛奖励办法",
+    "evidence": "外国语学院官网通知公告《郑州升达经贸管理学院第十七届英语单词大赛》，已办至第十七届"
+  },
+  {
+    "name": "外国语学院英语翻译大赛",
+    "short": "翻译大赛",
+    "category": "外国语学院",
+    "organizer": "郑州升达经贸管理学院外国语学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://wyxy.shengda.edu.cn/info/1125/5099.htm",
+    "src": "学院官网报道",
+    "kind": "竞赛",
+    "levelBasis": "本院主办，不适用校外竞赛奖励办法",
+    "evidence": "外国语学院官网「成长加油站」栏目《外国语学院第一届英语翻译大赛圆满结束》"
+  },
+  {
+    "name": "外国语学院商务英语实践大赛",
+    "short": "商务英语实践大赛",
+    "category": "外国语学院",
+    "organizer": "郑州升达经贸管理学院外国语学院",
+    "level": "校内",
+    "orgType": "本校主办",
+    "url": "https://wyxy.shengda.edu.cn/info/1125/5071.htm",
+    "src": "学院官网报道",
+    "kind": "竞赛",
+    "levelBasis": "本院主办，不适用校外竞赛奖励办法",
+    "evidence": "外国语学院官网「成长加油站」栏目《外国语学院第二届商务英语实践大赛顺利举行》"
+  }
+];
+
+/* ── 配置 ── */
+var FORM_URL    = "";   // 企业微信「收集表」链接
+var SHEET_URL   = "";   // 汇总结果表（仅可查看）链接
+var ICP_NO      = "";   // 例如 "豫ICP备2026000000号-1"
+var IS_OFFICIAL = false; // 上线后改 true，隐藏「演示版」标识
+
+/* ═══════════════════════════════════════════════════════════════
+   以下为页面逻辑
+   ★ 设计约束：不做任何倒计时 / 剩余天数计算。
+     静态站点无法感知赛程变更，任何「还剩N天」都可能误导学生。
+     截止与报名时间一律引导至官方通知。
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  var esc = function(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  };
+
+  var state = { q: '', level: '全部', cat: '全部' };
+
+  /* 分区 → 学科领域（用于详情页简介） */
+  var FIELD = {
+    '公共比赛': '综合性',
+    '公共考试': '综合性',
+    '创新创业教育学院': '创新创业',
+    '会计学院': '财会与金融',
+    '金融贸易学院': '经济与贸易',
+    '管理学院': '管理学',
+    '商学院': '工商管理',
+    '信息工程学院': '计算机与信息技术',
+    '外国语学院': '外国语言文学',
+    '文法学院': '人文与法学',
+    '艺术学院': '艺术与设计',
+    '建筑工程学院': '土木建筑与工程管理',
+    '体育学院': '体育学',
+    '机电学院': '机械与自动化',
+    '数学与信息科学学院': '数学与统计',
+    '马克思主义学院': '思想政治理论'
+  };
+
+  /* 预计算各分区数量 */
+  var CATS = (function(){
+    var seen = [], map = {};
+    COMPETITIONS.forEach(function(c){
+      if(map[c.category] === undefined){ map[c.category] = 0; seen.push(c.category); }
+      map[c.category]++;
+    });
+    /* 公共考试 → 公共比赛 → 各学院 */
+    var head = seen.filter(function(x){ return x === '公共考试' || x === '公共比赛'; });
+    var rest = seen.filter(function(x){ return x !== '公共考试' && x !== '公共比赛'; })
+                   .sort(function(a,b){ return a.localeCompare(b,'zh'); });
+    return head.concat(rest).map(function(x){ return { name:x, n:map[x] }; });
+  })();
+
+  var NAT   = COMPETITIONS.filter(function(c){ return c.level === '国家级'; }).length;
+  var PROV  = COMPETITIONS.filter(function(c){ return c.level === '省级'; }).length;
+  var EXAMS = COMPETITIONS.filter(function(c){ return c.kind === '考试'; }).length;
+
+  document.getElementById('statTotal').textContent  = COMPETITIONS.length;
+  document.getElementById('statNat').textContent    = NAT;
+  document.getElementById('statProv').textContent   = PROV;
+  var elExam = document.getElementById('statExam');
+  if(elExam) elExam.textContent = EXAMS;
+
+  /* ── 筛选 ── */
+  function match(c){
+    if(state.level !== '全部' && c.level !== state.level) return false;
+    if(state.cat   !== '全部' && c.category !== state.cat) return false;
+    if(state.q){
+      var k = state.q.toLowerCase();
+      var hay = (c.name + ' ' + (c.short||'') + ' ' + c.organizer + ' ' + c.category).toLowerCase();
+      if(hay.indexOf(k) === -1) return false;
+    }
+    return true;
+  }
+
+  /* ── 分区 chips ── */
+  function renderChips(){
+    var box = document.getElementById('chips');
+    var html = '<button type="button" class="chip' + (state.cat==='全部'?' on':'') +
+               '" data-cat="全部">全部<span class="n">' + COMPETITIONS.length + '</span></button>';
+    CATS.forEach(function(t){
+      html += '<button type="button" class="chip' + (state.cat===t.name?' on':'') +
+              '" data-cat="' + esc(t.name) + '">' + esc(t.name) +
+              '<span class="n">' + t.n + '</span></button>';
+    });
+    box.innerHTML = html;
+    Array.prototype.forEach.call(box.querySelectorAll('.chip'), function(b){
+      b.onclick = function(){ state.cat = b.getAttribute('data-cat'); renderChips(); renderList(); };
+    });
+  }
+
+  /* 卡片渲染 */
+  function cardHtml(c, i){
+    var LV = {
+      '国家级': 'lv-nat',
+      '省级': 'lv-prov',
+      '校内': 'lv-school',
+      '行业级': 'lv-industry',
+      '待核实': 'lv-pending'
+    };
+    var lvCls = LV[c.level] || 'lv-nat';
+    var isExam = c.kind === '考试';
+    var orgIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5"/></svg>';
+    var examIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
+    var arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+    var noLink = c.url ? '' : '<span class="badge nolink">无官网</span>';
+    return '<button type="button" class="card' + (isExam ? ' exam' : '') + '" data-i="' + i + '" data-lv="' + esc(c.level) + '" data-kind="' + esc(c.kind) + '">' +
+      '<span class="row1">' +
+        '<span class="badge ' + lvCls + '">' + esc(c.level) + '</span>' +
+        '<span class="badge cat">' + esc(c.category) + '</span>' +
+        noLink +
+      '</span>' +
+      '<h3>' + esc(c.name) + '</h3>' +
+      '<span class="org">' + (isExam ? examIcon : orgIcon) + '<span>' + esc(c.organizer) + '</span></span>' +
+      '<span class="go">' + arrow + '</span>' +
+    '</button>';
+  }
+
+  /* ── 列表 ── */
+  function renderList(){
+    var list = document.getElementById('list');
+    var arr = COMPETITIONS.filter(match);
+
+    document.getElementById('cnt').textContent = arr.length;
+
+    var dirty = (state.q || state.level !== '全部' || state.cat !== '全部');
+    document.getElementById('reset').style.visibility = dirty ? 'visible' : 'hidden';
+
+    if(!arr.length){
+      list.innerHTML =
+        '<div class="empty">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">' +
+            '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
+          '<div class="t">没有匹配的赛事</div>' +
+          '<div class="d">换个关键词，或把级别、学院筛选放宽试试。</div>' +
+        '</div>';
+      return;
+    }
+
+    list.innerHTML = arr.map(cardHtml).join('');
+
+    Array.prototype.forEach.call(list.querySelectorAll('.card'), function(el){
+      el.onclick = function(){
+        var idx = COMPETITIONS.indexOf(arr[+el.getAttribute('data-i')]);
+        location.hash = '#/p/' + idx;
+      };
+    });
+  }
+
+  /* ── 详情 ── */
+  function renderDetail(idx){
+    var c = COMPETITIONS[idx];
+    var root = document.getElementById('detailRoot');
+    if(!c){ location.hash = '#/home'; return; }
+
+    var isExam = c.kind === '考试';
+    var LV2 = { '国家级':'lv-nat', '省级':'lv-prov', '校内':'lv-school', '行业级':'lv-industry', '待核实':'lv-pending' };
+    var lvCls = LV2[c.level] || 'lv-nat';
+    var shortLine = c.short ? '<div class="r"><div class="k">' + (isExam ? '常用简称' : '赛事简称') + '</div><div class="v">' + esc(c.short) + '</div></div>' : '';
+
+    /* 简介：考试类用官方说明；竞赛类用可核实的事实拼装，不编造赛制 */
+    var introHtml = '';
+    if(isExam){
+      introHtml = c.note ? esc(c.note) : '';
+    }else{
+      var p1 = [];
+      // 第一句：谁办的、什么级别
+      p1.push('由<b>' + esc(c.organizer) + '</b>主办的' + (c.level === '省级' ? '省级' : (c.level === '校级' ? '校级' : '国家级')) + '学科竞赛。');
+      // 第二句：面向哪个学科领域
+      var field = FIELD[c.category];
+      if(field) p1.push('属于<b>' + field + '</b>领域，对应本校<b>' + esc(c.category) + '</b>。');
+      else if(c.category === '公共比赛') p1.push('面向全校各专业学生开放。');
+      // 第三句：资料完善程度（诚实告知）
+      if(c.src === '成功'){
+        p1.push('本站已归档主办方官方文件，报名条件与时间请以文件原文为准。');
+      }else if(c.src === '网页存档'){
+        p1.push('本站保存有官方页面存档，最新安排请以主办方发布为准。');
+      }else{
+        p1.push('该赛事收录自学校竞赛总表，暂未获取到官方文件，请以学院或主办单位通知为准。');
+      }
+      introHtml = p1.join('');
+    }
+
+    /* 晋级路径：仅当有明确证据时显示 */
+    var stageHtml = '';
+    if(c.stages && c.stages.length){
+      var chips = c.stages.map(function(s, i){
+        var cls = LV2[s] || 'lv-nat';
+        var arrow = i < c.stages.length - 1 ? '<span class="stage-arw">→</span>' : '';
+        return '<span class="badge ' + cls + '">' + esc(s) + '</span>' + arrow;
+      }).join('');
+      stageHtml =
+        '<div class="panel">' +
+          '<h3>晋级路径</h3>' +
+          '<div class="stage-row">' + chips + '</div>' +
+          '<p class="stage-note">' + esc(c.stageBasis) + '。本条为「' + esc(c.level) + '」环节，上级赛事为「' + esc(c.topLevel) + '」。</p>' +
+        '</div>';
+    }
+
+    /* 价值说明：不承诺学分，只说明用途 */
+    var valueHtml =
+      '<div class="panel">' +
+        '<h3>参加这个比赛有什么用</h3>' +
+        '<ul class="value-list">' +
+          '<li>可作为<b>学科竞赛经历</b>写入简历、求职材料与升学自述。</li>' +
+          '<li>获奖情况由主办方颁发证书，可作为<b>个人能力证明</b>。</li>' +
+          (c.level === '国家级' ? '<li>国家级赛事在校内评优、推免、就业中通常认可度更高。</li>' : '') +
+          (c.level === '省级' ? '<li>省级赛事适合作为参加国家级赛事的前置积累。</li>' : '') +
+          (c.level === '校内' ? '<li>校内赛事门槛较低，适合作为首次参赛的起点。</li>' : '') +
+          '<li class="muted-line">是否折算创新创业学分、综合测评加分，<b>以学校教务处与学院当年规定为准</b>，本站不作承诺。</li>' +
+        '</ul>' +
+      '</div>';
+
+    /* 级别依据：按学校奖励办法判定 */
+    var levelBasisHtml = '';
+    if(c.levelBasis){
+      levelBasisHtml =
+        '<div class="panel">' +
+          '<h3>级别判定依据</h3>' +
+          '<p class="basis-text">' + esc(c.levelBasis) + '。</p>' +
+          (c.evidence ? '<p class="basis-text" style="margin-top:8px"><b>收录证据：</b>' + esc(c.evidence) + '。</p>' : '') +
+          '<p class="basis-note">依据《郑州升达经贸管理学院学生参加校外学科、技能竞赛获奖奖励办法》（达院字〔2017〕111号）第五条：' +
+            '国家级为「教育部等国家行政部门、国家一级行业学会、各学科专业教学指导委员会等组织举办的全国性竞赛」；' +
+            '省级为「省教育厅等省级行政管理部门组织举办的各类学科竞赛」。' +
+            '该办法同时明确，参赛获奖级别的最终认定以主办单位文件和获奖证书为依据。</p>' +
+        '</div>';
+    }
+
+    root.innerHTML =
+      '<div class="dtop">' +
+        '<button class="back" id="backBtn" type="button">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>返回列表' +
+        '</button>' +
+        '<div class="badges">' +
+          '<span class="badge ' + lvCls + '">' + esc(c.level) + '</span>' +
+          '<span class="badge cat">' + esc(c.category) + '</span>' +
+        '</div>' +
+        '<h2>' + esc(c.name) + '</h2>' +
+      '</div>' +
+
+      '<div class="dbody">' +
+        '<div class="panel">' +
+          '<h3>基本信息</h3>' +
+          '<div class="kv">' +
+            '<div class="r"><div class="k">主办单位</div><div class="v">' + esc(c.organizer) + '</div></div>' +
+            '<div class="r"><div class="k">' + (isExam ? '考试级别' : '赛事级别') + '</div><div class="v">' + esc(c.level) + '</div></div>' +
+            '<div class="r"><div class="k">所属分区</div><div class="v">' + esc(c.category) + '</div></div>' +
+            shortLine +
+          '</div>' +
+        '</div>' +
+
+        (introHtml ? '<div class="panel"><h3>' + (isExam ? '考试简介' : '赛事简介') + '</h3><p class="intro">' + introHtml + '</p></div>' : '') +
+
+        stageHtml +
+
+        valueHtml +
+
+        levelBasisHtml +
+
+        '<div class="notice">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>' +
+          '<div class="tx">' +
+            '<b>' + (isExam ? '报名时间、报名条件与考试安排，请以官方通知为准。' : '报名时间、报名要求、费用与证书，请以官方通知为准。') + '</b>' +
+            '<ul>' +
+              (c.url ? '<li>点击下方按钮，查看主办方官方页面原文。</li>' : '<li>该赛事暂未收录到官方链接，请以学院或主办单位通知为准。</li>') +
+              '<li>如发现与官方信息不符，请联系所在学院联络员。</li>' +
+            '</ul>' +
+          '</div>' +
+        '</div>' +
+
+        (c.url
+          ? '<a class="cta" href="' + esc(c.url) + '" target="_blank" rel="noopener noreferrer">' +
+              (isExam ? '打开官方考试网站' : '打开官方通知') +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg>' +
+            '</a>'
+          : '<div class="cta sec" style="cursor:default">暂无官方链接</div>') +
+
+        '<button class="cta sec" id="backBtn2" type="button">返回列表</button>' +
+
+        '<p class="dfoot" style="margin-top:14px">' +
+          '数据来源：' +
+          (c.src === '成功' ? '主办方官方文件' :
+           c.src === '网页存档' ? '官方页面存档' :
+           (c.kind === '考试' ? '官方考试项目页' : '学校竞赛总表（暂无官方文件）')) +
+          '（2026-10-10 采集）<br>' +
+          '本站为校内公益汇总，不替代主办方与教务处官方发布。' +
+        '</p>' +
+      '</div>';
+
+    document.getElementById('backBtn').onclick  = function(){ history.length > 1 ? history.back() : (location.hash = '#/home'); };
+    document.getElementById('backBtn2').onclick = function(){ history.length > 1 ? history.back() : (location.hash = '#/home'); };
+  }
+
+  /* ── 路由 ── */
+  var VIEWS = { home:'v-home', detail:'v-detail', team:'v-team', help:'v-help' };
+
+  function route(){
+    var h = (location.hash || '#/home').replace(/^#\/?/, '');
+    var parts = h.split('/');
+    var name = parts[0] || 'home';
+    if(name !== 'p' && !VIEWS[name]) name = 'home';
+
+    var key = (name === 'p') ? 'detail' : name;
+
+    Object.keys(VIEWS).forEach(function(k){
+      document.getElementById(VIEWS[k]).hidden = (k !== key);
+    });
+
+    if(name === 'p') renderDetail(parseInt(parts[1], 10));
+
+    Array.prototype.forEach.call(document.querySelectorAll('.nav a'), function(a){
+      a.className = (a.getAttribute('data-r') === key) ? 'on' : '';
+    });
+
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+
+  /* ── 搜索 ── */
+  var q = document.getElementById('q');
+  var wrap = document.getElementById('searchWrap');
+  function onQ(){
+    state.q = q.value.trim();
+    wrap.classList.toggle('has', !!q.value);
+    renderList();
+  }
+  q.addEventListener('input', onQ);
+  q.addEventListener('search', onQ);
+  document.getElementById('qClear').onclick = function(){
+    q.value = ''; onQ(); q.focus();
+  };
+
+  /* ── 级别切换 ── */
+  Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(b){
+    b.onclick = function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(x){ x.className = ''; });
+      b.className = 'on';
+      state.level = b.getAttribute('data-lv');
+      renderList();
+    };
+  });
+
+  /* ── 重置 ── */
+  document.getElementById('reset').onclick = function(){
+    state = { q:'', level:'全部', cat:'全部' };
+    q.value = ''; wrap.classList.remove('has');
+    Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function(x){
+      x.className = (x.getAttribute('data-lv') === '全部') ? 'on' : '';
+    });
+    renderChips(); renderList();
+  };
+
+  /* ── Toast ── */
+  var tt = null;
+  function toast(msg){
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast on';
+    clearTimeout(tt);
+    tt = setTimeout(function(){ el.className = 'toast'; }, 2800);
+  }
+
+  /* ── 找队友链接 ── */
+  document.getElementById('lnkForm').onclick = function(e){
+    e.preventDefault();
+    if(FORM_URL){ window.location.href = FORM_URL; }
+    else { toast('收集表尚未配置，请联系项目组（配置文件底部 FORM_URL）'); }
+  };
+  document.getElementById('lnkSheet').onclick = function(e){
+    e.preventDefault();
+    if(SHEET_URL){ window.location.href = SHEET_URL; }
+    else { toast('汇总表尚未配置，请联系项目组（配置文件底部 SHEET_URL）'); }
+  };
+
+  /* ── 上线标识 / 备案号 ── */
+  if(IS_OFFICIAL){
+    var df = document.getElementById('demoFlag');
+    if(df) df.style.display = 'none';
+  }
+  if(ICP_NO){
+    var il = document.getElementById('icpLine');
+    if(il){
+      il.innerHTML = '<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">' + esc(ICP_NO) + '</a>';
+    }
+  }
+
+  /* ── chips 横向滚动提示 ── */
+  (function(){
+    var wrap = document.getElementById('chipsWrap');
+    var box  = document.getElementById('chips');
+    if(!wrap || !box) return;
+    function sync(){
+      // 滚到最右则隐藏渐隐遮罩
+      var atEnd = box.scrollLeft + box.clientWidth >= box.scrollWidth - 4;
+      wrap.classList.toggle('at-end', atEnd);
+    }
+    box.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    // 初次渲染后同步
+    setTimeout(sync, 60);
+    window.__syncChips = sync;
+  })();
+
+  /* ── 启动 ── */
+  renderChips();
+  renderList();
+  route();
+  if(window.__syncChips) setTimeout(window.__syncChips, 80);
+})();
+</script>
+</body>
+</html>
